@@ -3,7 +3,7 @@ const https = require('https');
 const url = 'https://time.com/';
 
 
-function getDataFromTime() {
+function getDataFromTimeWebsite() {
     return new Promise((resolve, reject) => {
         https.get(url, (response) => {
 
@@ -15,7 +15,6 @@ function getDataFromTime() {
 
             response.on('end', () => {
                 if (response.statusCode === 200) {
-
                     const articles = extractArticleTitles(data);
                     resolve(articles);
                 } else {
@@ -33,18 +32,18 @@ function getDataFromTime() {
 // extract data from html using regex
 function extractArticleTitles(html) {
     const regex = /<a\s+href="([^"]+)">\s*<h3[^>]*>([^<]+)<\/h3>/g;
-    let match;
-    const results = [];
+    let item;
+    const data = [];
 
-    while ((match = regex.exec(html)) !== null) {
-        const link = "https://time.com" + match[1];
-        const title = match[2];
-        results.push({ title, link });
+    while ((item = regex.exec(html)) !== null) {
+        const link = "https://time.com" + item[1];
+        const title = item[2];
+        data.push({ title, link });
     }
 
-    return results;
+    return data;
 }
 
 module.exports = {
-    getDataFromTime,
+    getDataFromTime: getDataFromTimeWebsite,
 };
